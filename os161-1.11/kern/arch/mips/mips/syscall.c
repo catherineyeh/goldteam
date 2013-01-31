@@ -69,6 +69,22 @@ void mips_syscall(struct trapframe *tf) {
       err = sys_reboot(tf->tf_a0);
       break;
 
+    case (SYS_helloworld):
+      err = _helloworld();
+      break;
+
+    case (SYS_printint):
+      err = _printint(tf->tf_a0);
+      break;
+
+    case (SYS_printstring):
+      err = _printstring(tf->tf_a0, tf->tf_a1);
+      break;
+
+    case (SYS_exit):
+      _exit(tf->tf_a0);
+      break;
+
     /* Add stuff here */
 
     default:

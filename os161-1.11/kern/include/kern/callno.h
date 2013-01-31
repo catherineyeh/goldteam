@@ -40,6 +40,10 @@
 #define SYS___getcwd     29
 #define SYS_stat         30
 #define SYS_lstat        31
+#define SYS_helloworld 32
+#define SYS_printint 33
+#define SYS_printstring 34
+#define SYS_exit 35
 /*CALLEND*/
 
 
