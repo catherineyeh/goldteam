@@ -7,5 +7,4 @@
 
 int sys_reboot(int code);
 
-
 #endif /* _SYSCALL_H_ */
