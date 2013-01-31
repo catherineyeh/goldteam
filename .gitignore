@@ -24,11 +24,6 @@ version
 bin/
 sbin/
 
-#Testbin directory 
-testbin/
-uw-testbin/
-my-testbin/
-
 #Swap files
 *.sw?
 
