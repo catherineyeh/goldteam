@@ -67,6 +67,8 @@ static void boot(void) {
           buildversion);
   kprintf("\n");
 
+  _printstring("helloworld\n", 10);
+
   ram_bootstrap();
   scheduler_bootstrap();
   thread_bootstrap();
@@ -151,17 +153,24 @@ int _printint(int value) {
 }
 
 int _printstring(char *string, int numchars) {
-  /* Copy the string from the user address into a kernel buffer, and then print
+  /*
+   * Copy the string from the user address into a kernel buffer, and then print
    * it using kprintf. Be careful to check for misuse by the user (for example,
    * the memory pointed to by "string" may not contain a proper null-terminated
    * string of length numchars). If an error is detected, errno should be set
    * and an appropriate result returned. Otherwise, the return value should be
    * the return value from kprintf.
    */
+  char *str = string;
+  if (strlen(str) == numchars)
+    return kprintf(string);
+  /*
+  errno = 1; // Todo: correct this errno
+  return errno;
+  */
 }
 
 void _exit(int code) {
-  /* Only call thread_exit from kernel space. */
   thread_exit();
 }
 
