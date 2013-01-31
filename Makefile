@@ -10,3 +10,6 @@ run: default
 # see section "Using gdb with OS 161" on https://docs.google.com/document/d/17pYaR09qU_g580qj8pj2Z9d1TZMOGtmH0r2-EtdSBQI/pub
 debug: default
 	cd root && sys161 -w kernel
+
+clean:
+	rm -rf os161-1.11/kern/compile root/DISK1.img root/DISK2.img root/kernel-ASST*
