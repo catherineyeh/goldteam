@@ -142,6 +142,17 @@ int sys_reboot(int code) {
   return 0;
 }
 
+int _helloworld(void) {
+  kprintf("Hello World\n");
+}
+
+int _printint(int value) {
+  return kprintf(value);
+}
+
+int _printstring(char *string, int numchars) {
+}
+
 /*
  * Kernel main. Boot up, then fork the menu thread; wait for a reboot
  * request, and then shut down.
