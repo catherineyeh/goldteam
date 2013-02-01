@@ -6,9 +6,6 @@
  */
 
 int sys_reboot(int code);
-int _helloworld(void);
-int _printint(int value);
-int _printstring(char *string, int numchars);
-void _exit(int code);
+
 
 #endif /* _SYSCALL_H_ */
