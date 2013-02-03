@@ -1,11 +1,5 @@
 #include <types.h>
-#include <kern/errno.h>
-#include <lib.h>
-#include <uio.h>
-#include <addrspace.h>
-#include <thread.h>
-#include <curthread.h>
-#include <vnode.h>
+#include <syscall.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
