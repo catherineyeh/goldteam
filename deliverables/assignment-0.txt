@@ -1,0 +1,30 @@
+1.  Which register number is used for the global pointer (gp) in OS/161?
+2.  What bus/busses does OS/161 support?
+3.  What is the difference between splhigh and spl0?
+4.  Why do we use typedef u_int32_t instead of saying int?
+5.  What does splx return?
+6.  What is the highest interrupt level?
+7.  How frequently are hardclock interrupts generated?
+8.  What functions comprise the standard interface to a VFS device?
+9.  How many characters are allowed in a volume name?
+10. What is the block size of SFS?
+11. What is the standard interface to a file system (i.e., what functions must
+    you implement to implement a new file system)?
+12. What function puts a thread to sleep?
+13. How large are OS/161 file offsets?
+14. What operations can you do on a vnode?
+15. What is the maximum filename length in OS/161?
+16. What is the system call number for a write?
+17. Where is STDIN_FILENO defined?
+18. Is it OK to initialize the thread system before the scheduler? Why (not)?
+19. What is a zombie?
+20. How large is the initial run queue?
+21. What does a device name in OS/161 look like?
+22. What does a raw device name in OS/161 look like?
+23. What lock protects the vnode reference count?
+24. What device types are currently supported?
+
+When a user calls a system call from libc, how does control get transferred to
+the kernel. What functions are called before the kernel version of your system
+call is invoked? How is control returned back to the user? Give a detailed
+explanation citing source files and code.
