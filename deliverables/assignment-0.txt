@@ -1,8 +1,17 @@
 1.  Which register number is used for the global pointer (gp) in OS/161?
+      Register 28.
 2.  What bus/busses does OS/161 support?
+      Only LAMEbus.
 3.  What is the difference between splhigh and spl0?
+      splhigh takes no arguments and sets the priority level to the highest
+      possible level, which disables all interrupts. spl0 takes one argument and
+      sets the priority level to that argument, which enables the interrupts
+      that that argument represents.
 4.  Why do we use typedef u_int32_t instead of saying int?
+      The size of an int datatype varies depending on the machine. u_int32_t
+      allows us to have a constant size on all machines.
 5.  What does splx return?
+      splx returns the old interrupt state.
 6.  What is the highest interrupt level?
 7.  How frequently are hardclock interrupts generated?
 8.  What functions comprise the standard interface to a VFS device?
