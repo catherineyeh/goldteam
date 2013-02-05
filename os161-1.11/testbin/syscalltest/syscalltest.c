@@ -1,5 +1,5 @@
 #include <unistd.h>
 int main() {
-  _helloworld();
+  _printint(42);
   return 0;
 }

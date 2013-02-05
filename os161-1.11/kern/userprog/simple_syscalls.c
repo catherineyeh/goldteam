@@ -6,5 +6,13 @@ int _helloworld() {
 }
 
 int _printint(int value) {
-  return kprintf(value);
+  return kprintf("%d", value);
+}
+
+int _printstring(char *string, int numchars) {
+  //return 
+}
+
+void _exit(int code) {
+  return thread_exit();
 }
