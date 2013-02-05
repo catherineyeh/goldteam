@@ -27,6 +27,7 @@
 17. Where is STDIN_FILENO defined?
 18. Is it OK to initialize the thread system before the scheduler? Why (not)?
 19. What is a zombie?
+      A zombie is a dead thread that needs to be disposed of.
 20. How large is the initial run queue?
 21. What does a device name in OS/161 look like?
 22. What does a raw device name in OS/161 look like?
