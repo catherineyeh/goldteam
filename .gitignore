@@ -20,16 +20,19 @@ kernel
 .cvsignore
 vers.c
 version
-
 #Executable direcories
 bin/
 sbin/
 
+#Testbin directory 
+testbin/
+uw-testbin/
+my-testbin/
+
 #Swap files
 *.sw?
 
-#Make files
-os161-1.11/kern/compile
+#linked files
 root/DISK1.img
 root/DISK2.img
 root/kernel-ASST0
