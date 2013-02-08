@@ -1,5 +1,7 @@
 #include <unistd.h>
 int main() {
-  _printint(42);
+  char *str = "Hi there";
+  str[8] = '1';
+  _printstring(str, 8);
   return 0;
 }

@@ -70,8 +70,6 @@ boot(void)
 		GROUP_VERSION, buildconfig, buildversion);
 	kprintf("\n");
 
-  _printstring("Hello world, sincerely _printstring\n", 36);
-
 	ram_bootstrap();
 	scheduler_bootstrap();
 	thread_bootstrap();
