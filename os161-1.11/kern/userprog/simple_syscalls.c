@@ -11,7 +11,7 @@ int _printint(int value) {
 
 int _printstring(char *string, int numchars) {
   char *str = string;
-  if  (str[numchars] == 0 && strlen(str) == numchars) {
+  if  (str[numchars] == \0 && strlen(str) == numchars) {
     return kprintf(str);
   }
   int errno = 1; // Todo: correct this errno
