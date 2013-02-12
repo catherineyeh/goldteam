@@ -14,23 +14,40 @@
       splx returns the old interrupt state.
 6.  What is the highest interrupt level?
 7.  How frequently are hardclock interrupts generated?
+      100 times per second.
 8.  What functions comprise the standard interface to a VFS device?
+      vfs_setcurdir, vfs_clearcurdir, vfs_getcurdir, vfs_sync, vfs_getroot,
+      vfs_getdevname, vfs_lookup, vfs_lookparent, vfs_open, vfs_close,
+      vfs_readlink, vfs_symlink, vfs_mkdir, vfs_link, vfs_remove, vfs_rmdir,
+      vfs_rename, vfs_chdir, vfs_getcwd, vfs_bootstrap, vfs_initbootfs,
+      vfs_setbootfs, vfs_clearbootfs, vfs_adddev, vfs_addfs, vfs_mount,
+      vfs_unmount, and vfs_unmountall
 9.  How many characters are allowed in a volume name?
+      32.
 10. What is the block size of SFS?
+      512 bytes.
 11. What is the standard interface to a file system (i.e., what functions must
     you implement to implement a new file system)?
 12. What function puts a thread to sleep?
 13. How large are OS/161 file offsets?
 14. What operations can you do on a vnode?
+      emufs_loadvnode, emufs_open, emufs_opendir, emufs_close, emufs_reclaim,
+      emufs_read, emufs_getdirentry, emufs_write, emufs_ioctl, emufs_stat,
+      emufs_file_gettype, emufs_dir_gettype, emufs_tryseek, emufs_fsync,
+      emufs_truncate, emufs_creat, emufs_lookup, emufs_lookparent,
+      emufs_namefile
 15. What is the maximum filename length in OS/161?
 16. What is the system call number for a write?
 17. Where is STDIN_FILENO defined?
+      kern/include/kern/unistd.h:23
 18. Is it OK to initialize the thread system before the scheduler? Why (not)?
 19. What is a zombie?
       A zombie is a dead thread that needs to be disposed of.
 20. How large is the initial run queue?
 21. What does a device name in OS/161 look like?
 22. What does a raw device name in OS/161 look like?
+      "lhd0raw"; it is non-NULL iff the device can have a filesystem mounted on
+      it
 23. What lock protects the vnode reference count?
 24. What device types are currently supported?
 
