@@ -82,6 +82,12 @@ mips_syscall(struct trapframe *tf)
 
 	    case SYS__printstring:
 	    	err = _printstring(tf->tf_a0, tf->tf_a1);
+        if (err < 0) {
+          err = err * -1;
+        }
+        else {
+          err = 0;
+        }
 	    	break;
 
 	    case SYS__exit:

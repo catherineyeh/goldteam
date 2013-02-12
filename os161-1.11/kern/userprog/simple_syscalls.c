@@ -10,11 +10,12 @@ int _printint(int value) {
 }
 
 int _printstring(char *string, int numchars) {
-  char *str = string;
-  if  (str[numchars] == \0 && strlen(str) == numchars) {
+  char str[255];
+  strcpy(str, string); 
+  if  (str[numchars] == '\0' && strlen(str) == numchars) {
     return kprintf(str);
   }
-  int errno = 1; // Todo: correct this errno
+  int errno = -1; // Todo: correct this errno
   return errno;
 }
 
