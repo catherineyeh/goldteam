@@ -1,7 +1,7 @@
 1.  Which register number is used for the global pointer (gp) in OS/161?
-      Register 28.
+      28
 2.  What bus/busses does OS/161 support?
-      Only LAMEbus.
+      LAMEbus
 3.  What is the difference between splhigh and spl0?
       splhigh takes no arguments and sets the priority level to the highest
       possible level, which disables all interrupts. spl0 takes one argument and
@@ -14,7 +14,7 @@
       splx returns the old interrupt state.
 6.  What is the highest interrupt level?
 7.  How frequently are hardclock interrupts generated?
-      100 times per second.
+      100 times per second
 8.  What functions comprise the standard interface to a VFS device?
       vfs_setcurdir, vfs_clearcurdir, vfs_getcurdir, vfs_sync, vfs_getroot,
       vfs_getdevname, vfs_lookup, vfs_lookparent, vfs_open, vfs_close,
@@ -23,9 +23,9 @@
       vfs_setbootfs, vfs_clearbootfs, vfs_adddev, vfs_addfs, vfs_mount,
       vfs_unmount, and vfs_unmountall
 9.  How many characters are allowed in a volume name?
-      32.
+      32
 10. What is the block size of SFS?
-      512 bytes.
+      512 bytes
 11. What is the standard interface to a file system (i.e., what functions must
     you implement to implement a new file system)?
 12. What function puts a thread to sleep?
@@ -38,6 +38,7 @@
       emufs_namefile
 15. What is the maximum filename length in OS/161?
 16. What is the system call number for a write?
+      6
 17. Where is STDIN_FILENO defined?
       kern/include/kern/unistd.h:23
 18. Is it OK to initialize the thread system before the scheduler? Why (not)?
@@ -45,6 +46,7 @@
       A zombie is a dead thread that needs to be disposed of.
 20. How large is the initial run queue?
 21. What does a device name in OS/161 look like?
+      "lhd0"; it is always a valid string
 22. What does a raw device name in OS/161 look like?
       "lhd0raw"; it is non-NULL iff the device can have a filesystem mounted on
       it
