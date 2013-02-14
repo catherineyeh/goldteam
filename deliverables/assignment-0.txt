@@ -13,6 +13,9 @@
 5.  What does splx return?
       splx returns the old interrupt state.
 6.  What is the highest interrupt level?
+      OS161 doesn't support interrupts, it just has a function splhigh() 
+      which sets the priority level to the highest level, disabling
+      all other interrupts.
 7.  How frequently are hardclock interrupts generated?
       100 times per second
 8.  What functions comprise the standard interface to a VFS device?
@@ -31,6 +34,7 @@
 12. What function puts a thread to sleep?
       thread_sleep
 13. How large are OS/161 file offsets?
+      4
 14. What operations can you do on a vnode?
       emufs_loadvnode, emufs_open, emufs_opendir, emufs_close, emufs_reclaim,
       emufs_read, emufs_getdirentry, emufs_write, emufs_ioctl, emufs_stat,
@@ -44,6 +48,8 @@
 17. Where is STDIN_FILENO defined?
       kern/include/kern/unistd.h:23
 18. Is it OK to initialize the thread system before the scheduler? Why (not)?
+      It's not OK to initialize the thread system before the scheduler because
+      the schedulers handles how threads get setup and how they run.
 19. What is a zombie?
       A zombie is a dead thread that needs to be disposed of.
 20. How large is the initial run queue?
@@ -56,6 +62,8 @@
 23. What lock protects the vnode reference count?
       lock *vn_countlock
 24. What device types are currently supported?
+      OS161 supports devices just like freeBSD does, so it supports most
+      devices just like freeBSD does.
 
 When a user calls a system call from libc, how does control get transferred to
 the kernel. What functions are called before the kernel version of your system
