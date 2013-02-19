@@ -20,3 +20,85 @@
   10. Why does the lock API in OS161 provide lock_do_i_hold(), but not
       lock_get_holder() ?
 
+Identify Deadlocks
+  Here are code samples for two threads that use binary semaphores. Give a 
+  sequence of execution and context switches in which these two threads can 
+  deadlock. Propose a change to one or both of them that makes deadlock 
+  impossible. What general principle do the original threads violate that 
+  causes them to deadlock?
+
+  The function me starts running and when it does P(mutex) it decrements
+  the mutex counter, which sets it below 0 so the thread sleeps.  Then we 
+  switch to you and it sees that the counter is below 0 so it attempts to
+  wake the other process which does P(data) which sets it below 0 again so
+  it sleeps and you is waiting on me which is sleeping, so they'll never
+  continue
+
+semaphore *mutex, *data;
+
+void me() {
+  P(mutex);
+  /* do something */
+  P(data);
+  /* do something else */
+  V(mutex);
+  /* clean up */
+  V(data);
+}
+
+void you() {
+  P(data)
+  P(mutex);
+  /* do something */
+  V(data);        
+  V(mutex);
+}
+
+Here are two more threads. Can they deadlock? If so, give a concurrent 
+execution in which they do and propose a change to one or both that makes 
+them deadlock free.
+
+  laurel runs and gets the lock on mutex, file1, and  file2 and then releases 
+  file1 and mutex and then we switch to hardy and it locks file1 and then 
+  tries to get file2 but it has to wait because laurel still has the lock on it.
+  So it switches back to laurel which attempts to lock file1 but can't because
+  hardy has the lock on it still so laurel is waiting for hardy, but hardy
+  is waiting on laurel so it deadlocks.
+
+lock *file1, *file2, *mutex;
+
+void laurel() {
+  lock_acquire(mutex);
+  /* do something */
+  lock_acquire(file1);
+  /* write to file 1 */
+  lock_acquire(file2);
+  /* write to file 2 */
+  lock_release(file1);
+  lock_release(mutex);
+  /* do something */
+
+  lock_acquire(file1);
+  /* read from file 1 */
+  /* write to file 2 */
+
+  lock_release(file2);
+  lock_release(file1);
+}
+
+void hardy() {
+  /* do stuff */
+  lock_acquire(file1);
+  /* read from file 1 */
+  lock_acquire(file2);
+  /* write to file 2 */
+  lock_release(file1);
+  lock_release(file2);
+  lock_acquire(mutex);
+  /* do something */
+  lock_acquire(file1);
+  /* write to file 1 */
+  lock_release(file1);
+  lock_release(mutex);
+}
+
