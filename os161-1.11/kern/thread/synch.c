@@ -114,6 +114,8 @@ lock_create(const char *name)
 		return NULL;
 	}
 	
+  // Set owner to NULL because no one owns lock yet
+  lock->curOwner = NULL;
 	// add stuff here as needed
 	
 	return lock;
@@ -127,33 +129,64 @@ lock_destroy(struct lock *lock)
 	// add stuff here as needed
 	
 	kfree(lock->name);
+  kfree(lock->curOwner);
 	kfree(lock);
 }
 
 void
 lock_acquire(struct lock *lock)
 {
-	// Write this
+  assert(lock);
+  // We don't want a NULL lock
 
-	(void)lock;  // suppress warning until code gets written
+  int interrupts = splhigh(); 
+  // Set interrupts high to make sure this is the 
+  // only thing getting executed
+
+  // Check to see if it's owned, if it is wait
+  while(lock->curOwner != NULL) { 
+    thread_sleep(lock);
+  }
+
+  // Grab the lock
+  lock->curOwner = curthread;
+
+  splx(interrupts);
+  // Return interrupts
 }
 
 void
 lock_release(struct lock *lock)
 {
-	// Write this
+  assert(lock);
 
-	(void)lock;  // suppress warning until code gets written
+  int interrupts = splhigh();
+
+  assert(lock_do_i_hold(lock));
+
+  lock->curOwner = NULL;
+
+  splx(interrupts);
 }
 
 int
 lock_do_i_hold(struct lock *lock)
 {
-	// Write this
+  assert(lock);
+  int doIHold;
 
-	(void)lock;  // suppress warning until code gets written
+	int interrupts = splhigh();
 
-	return 1;    // dummy until code gets written
+  if (curthread == lock->curOwner) {
+    doIHold = 1;
+  }
+  else {
+    doIHold = 0;
+  }
+
+  splx(interrupts);
+  
+	return doIHold;
 }
 
 ////////////////////////////////////////////////////////////
