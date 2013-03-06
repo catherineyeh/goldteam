@@ -166,6 +166,8 @@ lock_release(struct lock *lock)
 
   lock->curOwner = NULL;
 
+  thread_wakeup(lock);
+
   splx(interrupts);
 }
 
