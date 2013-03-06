@@ -1,6 +1,9 @@
 5.1.1 Thread Questions
   1. What happens to a thread when it exits (i.e., calls thread_exit() )? What
      about when it sleeps?
+       When a thread exits, its address space gets destroyed and it removes
+       itself from the global threadcount. It doesn't actually get destroyed
+       until thread_destroy is called from exorcise.
   2. What function(s) handle(s) a context switch?
   3. How many thread states are there? What are they?
   4. What does it mean to turn interrupts off? How is this accomplished? Why is
