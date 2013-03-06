@@ -13,14 +13,29 @@
        4; S_RUN, S_READY, S_SLEEP, S_ZOMB
   4. What does it mean to turn interrupts off? How is this accomplished? Why is
      it important to turn off interrupts in the thread subsystem code?
+       Turning interrupts off means the CPU can't be retasked by an interrupt
+       sent from any one of many different sources (mouse click, etc.).
+       Interrupts are turned off using the splhigh function.
+       It's important to turn off interrupts in the thread subsystem code so
+       that we can accomplish certain tasks atomically, such as printing the
+       entire run queue.
   5. What happens when a thread wakes up another thread? How does a sleeping
      thread get to run again?
+       For a thread to wake up another thread, it needs to know the sleep
+       address of the sleeping thread.
+       A sleeping thread will only run again if thread_wakeup is called using
+       the correct sleep address.
 
 5.1.2 Scheduler Questions
   6. What function is responsible for choosing the next thread to run?
+       scheduler
   7. How does that function pick the next thread?
+       It chooses the next thread in the run queue.
   8. What role does the hardware timer play in scheduling? What hardware
      independent function is called on a timer interrupt?
+       The hardware timer influences rtclock, a generic clock interface.
+       hardclock is called from the timer interrupt a set number of times per
+       second.
 
 5.1.3 Synchronization Questions
   9. Describe how thread_sleep() and thread_wakeup() are used to implement
@@ -29,14 +44,14 @@
       lock_get_holder() ?
 
 Identify Deadlocks
-  Here are code samples for two threads that use binary semaphores. Give a 
-  sequence of execution and context switches in which these two threads can 
-  deadlock. Propose a change to one or both of them that makes deadlock 
-  impossible. What general principle do the original threads violate that 
+  Here are code samples for two threads that use binary semaphores. Give a
+  sequence of execution and context switches in which these two threads can
+  deadlock. Propose a change to one or both of them that makes deadlock
+  impossible. What general principle do the original threads violate that
   causes them to deadlock?
 
   The function me starts running and when it does P(mutex) it decrements
-  the mutex counter, which sets it below 0 so the thread sleeps.  Then we 
+  the mutex counter, which sets it below 0 so the thread sleeps.  Then we
   switch to you and it sees that the counter is below 0 so it attempts to
   wake the other process which does P(data) which sets it below 0 again so
   it sleeps and you is waiting on me which is sleeping, so they'll never
@@ -62,12 +77,12 @@ void you() {
   V(mutex);
 }
 
-Here are two more threads. Can they deadlock? If so, give a concurrent 
-execution in which they do and propose a change to one or both that makes 
+Here are two more threads. Can they deadlock? If so, give a concurrent
+execution in which they do and propose a change to one or both that makes
 them deadlock free.
 
-  laurel runs and gets the lock on mutex, file1, and  file2 and then releases 
-  file1 and mutex and then we switch to hardy and it locks file1 and then 
+  laurel runs and gets the lock on mutex, file1, and  file2 and then releases
+  file1 and mutex and then we switch to hardy and it locks file1 and then
   tries to get file2 but it has to wait because laurel still has the lock on it.
   So it switches back to laurel which attempts to lock file1 but can't because
   hardy has the lock on it still so laurel is waiting for hardy, but hardy
