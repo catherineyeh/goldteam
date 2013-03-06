@@ -8,7 +8,9 @@
        processed, freeing the CPU to handle another process. When it wakes up,
        it must be awoken from the same sleep address.
   2. What function(s) handle(s) a context switch?
+       mi_switch and md_switch
   3. How many thread states are there? What are they?
+       4; S_RUN, S_READY, S_SLEEP, S_ZOMB
   4. What does it mean to turn interrupts off? How is this accomplished? Why is
      it important to turn off interrupts in the thread subsystem code?
   5. What happens when a thread wakes up another thread? How does a sleeping
