@@ -116,7 +116,6 @@ lock_create(const char *name)
 	
   // Set owner to NULL because no one owns lock yet
   lock->curOwner = NULL;
-	// add stuff here as needed
 	
 	return lock;
 }
@@ -126,8 +125,6 @@ lock_destroy(struct lock *lock)
 {
 	assert(lock != NULL);
 
-	// add stuff here as needed
-	
 	kfree(lock->name);
   kfree(lock->curOwner);
 	kfree(lock);
@@ -212,6 +209,7 @@ cv_create(const char *name)
 		return NULL;
 	}
 	
+  cv->curLock = NULL;
 	// add stuff here as needed
 	
 	return cv;
@@ -222,18 +220,22 @@ cv_destroy(struct cv *cv)
 {
 	assert(cv != NULL);
 
-	// add stuff here as needed
-	
 	kfree(cv->name);
+  kfree(cv->curLock);
 	kfree(cv);
 }
 
 void
 cv_wait(struct cv *cv, struct lock *lock)
 {
-	// Write this
-	(void)cv;    // suppress warning until code gets written
-	(void)lock;  // suppress warning until code gets written
+  int interrupts;
+  assert(cv != NULL);
+  
+  lock_release(lock);
+  interrupts = splhigh();
+  thread_sleep(cv);
+  splx(interrupts);
+  lock_acquire(lock);
 }
 
 void
