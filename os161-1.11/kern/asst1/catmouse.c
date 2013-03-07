@@ -67,6 +67,8 @@ int NumCats;   // number of cats
 int NumMice;   // number of mice
 int NumLoops;  // number of times each cat and mouse should eat
 
+struct lock* bowls[2];
+
 /*
  * Once the main driver function (catmouse()) has created the cat and mouse
  * simulation threads, it uses this semaphore to block until all of the
@@ -133,7 +135,9 @@ cat_simulation(void * unusedpointer,
 
     /* legal bowl numbers range from 1 to NumBowls */
     bowl = ((unsigned int)random() % NumBowls) + 1;
+    lock_acquire(bowls[bowl]);
     cat_eat(bowl);
+    lock_release(bowls[bowl]);
 
   }
 
@@ -194,7 +198,9 @@ mouse_simulation(void * unusedpointer,
 
     /* legal bowl numbers range from 1 to NumBowls */
     bowl = ((unsigned int)random() % NumBowls) + 1;
+    lock_acquire(bowls[bowl]);
     mouse_eat(bowl);
+    lock_release(bowls[bowl]);
 
   }
 
@@ -222,7 +228,7 @@ mouse_simulation(void * unusedpointer,
  *      You may need to modify this function, e.g., to
  *      initialize synchronization primitives used
  *      by the cat and mouse threads.
- *      
+ *
  *      However, you should should ensure that this function
  *      continues to create the appropriate numbers of
  *      cat and mouse threads, to initialize the simulation,
@@ -235,6 +241,9 @@ catmouse(int nargs,
 {
   int index, error;
   int i;
+  struct lock* bowls[2];
+  bowls[0] = lock_create("bowl1");
+  bowls[1] = lock_create("bowl2");
 
   /* check and process command line arguments */
   if (nargs != 5) {
@@ -284,7 +293,7 @@ catmouse(int nargs,
    * Start NumCats cat_simulation() threads.
    */
   for (index = 0; index < NumCats; index++) {
-    error = thread_fork("cat_simulation thread",NULL,index,cat_simulation,NULL);
+    error = thread_fork("cat_simulation thread",bowls,index,cat_simulation,NULL);
     if (error) {
       panic("cat_simulation: thread_fork failed: %s\n", strerror(error));
     }
@@ -294,7 +303,7 @@ catmouse(int nargs,
    * Start NumMice mouse_simulation() threads.
    */
   for (index = 0; index < NumMice; index++) {
-    error = thread_fork("mouse_simulation thread",NULL,index,mouse_simulation,NULL);
+    error = thread_fork("mouse_simulation thread",bowls,index,mouse_simulation,NULL);
     if (error) {
       panic("mouse_simulation: thread_fork failed: %s\n",strerror(error));
     }
