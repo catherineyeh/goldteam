@@ -539,6 +539,40 @@ thread_sleep(const void *addr)
 	curthread->t_sleepaddr = NULL;
 }
 
+// Same as thread_wakeup except we want just one process
+// So we break after we find it
+
+void
+thread_wakeup_single(const void *addr)
+{
+	int i, result;
+	
+	// meant to be called with interrupts off
+	assert(curspl>0);
+	
+	// This is inefficient. Feel free to improve it.
+	
+	for (i=0; i<array_getnum(sleepers); i++) {
+		struct thread *t = array_getguy(sleepers, i);
+		if (t->t_sleepaddr == addr) {
+			
+			// Remove from list
+			array_remove(sleepers, i);
+			
+			// must look at the same sleepers[i] again
+			i--;
+
+			/*
+			 * Because we preallocate during thread_fork,
+			 * this should never fail.
+			 */
+			result = make_runnable(t);
+			assert(result==0);
+      break;
+		}
+	}
+}
+
 /*
  * Wake up one or more threads who are sleeping on "sleep address"
  * ADDR.

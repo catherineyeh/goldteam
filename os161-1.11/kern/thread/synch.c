@@ -238,7 +238,7 @@ void
 cv_signal(struct cv *cv, struct lock *lock)
 {
   int interrupts = splhigh();
-  thread_wakeup(cv);
+  thread_wakeup_single(cv); // wake up one thread
   splx(interrupts);
 }
 
@@ -246,6 +246,6 @@ void
 cv_broadcast(struct cv *cv, struct lock *lock)
 {
   int interrupts = splhigh();
-  thread_wakeup(cv);
+  thread_wakeup(cv); // wake up all threads
   splx(interrupts);
 }

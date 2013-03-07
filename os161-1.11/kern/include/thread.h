@@ -84,6 +84,10 @@ void thread_yield(void);
  */
 void thread_sleep(const void *addr);
 
+// Wakes up just one thread
+
+void thread_wakeup_single(const void *addr);
+
 /*
  * Cause all threads sleeping on the specified address to wake up.
  * Interrupts must be disabled.
