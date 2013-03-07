@@ -67,7 +67,7 @@ int NumCats;   // number of cats
 int NumMice;   // number of mice
 int NumLoops;  // number of times each cat and mouse should eat
 
-struct lock* bowls[2];
+struct semaphore* bowls[2];
 
 /*
  * Once the main driver function (catmouse()) has created the cat and mouse
@@ -101,10 +101,7 @@ struct semaphore *CatMouseWait;
  *      in the assignment description
  */
 
-static
-void
-cat_simulation(void * unusedpointer, 
-               unsigned long catnumber)
+static void cat_simulation(void * unusedpointer, unsigned long catnumber)
 {
   int i;
   unsigned int bowl;
@@ -133,11 +130,12 @@ cat_simulation(void * unusedpointer,
      * synchronization so that the cat does not violate
      * the rules when it eats */
 
-    /* legal bowl numbers range from 1 to NumBowls */
-    bowl = ((unsigned int)random() % NumBowls) + 1;
-    lock_acquire(bowls[bowl]);
-    cat_eat(bowl);
-    lock_release(bowls[bowl]);
+    /* legal bowl numbers range from 0 to NumBowls-1 */
+    bowl = ((unsigned int)random() % NumBowls);
+    //bowl = 0;
+    P(bowls[bowl]);
+    cat_eat(bowl+1);
+    V(bowls[bowl]);
 
   }
 
@@ -164,11 +162,7 @@ cat_simulation(void * unusedpointer,
  *
  */
 
-static
-void
-mouse_simulation(void * unusedpointer,
-          unsigned long mousenumber)
-{
+static void mouse_simulation(void * unusedpointer, unsigned long mousenumber) {
   int i;
   unsigned int bowl;
 
@@ -196,11 +190,15 @@ mouse_simulation(void * unusedpointer,
      * synchronization so that the mouse does not violate
      * the rules when it eats */
 
-    /* legal bowl numbers range from 1 to NumBowls */
-    bowl = ((unsigned int)random() % NumBowls) + 1;
-    lock_acquire(bowls[bowl]);
-    mouse_eat(bowl);
-    lock_release(bowls[bowl]);
+    /* legal bowl numbers range from 0 to NumBowls-1 */
+    bowl = ((unsigned int)random() % NumBowls);
+    //bowl = 0;
+    int b;
+    for(b = 0; b < NumBowls; ++b)
+      P(bowls[b]);
+    mouse_eat(bowl+1);
+    for(b = 0; b < NumBowls; ++b)
+      V(bowls[b]);
 
   }
 
@@ -241,9 +239,9 @@ catmouse(int nargs,
 {
   int index, error;
   int i;
-  struct lock* bowls[2];
-  bowls[0] = lock_create("bowl1");
-  bowls[1] = lock_create("bowl2");
+
+  bowls[0] = sem_create("bowl1", 1);
+  bowls[1] = sem_create("bowl2", 1);
 
   /* check and process command line arguments */
   if (nargs != 5) {
@@ -293,7 +291,7 @@ catmouse(int nargs,
    * Start NumCats cat_simulation() threads.
    */
   for (index = 0; index < NumCats; index++) {
-    error = thread_fork("cat_simulation thread",bowls,index,cat_simulation,NULL);
+    error = thread_fork("cat_simulation thread",NULL,index,cat_simulation,NULL);
     if (error) {
       panic("cat_simulation: thread_fork failed: %s\n", strerror(error));
     }
@@ -303,7 +301,7 @@ catmouse(int nargs,
    * Start NumMice mouse_simulation() threads.
    */
   for (index = 0; index < NumMice; index++) {
-    error = thread_fork("mouse_simulation thread",bowls,index,mouse_simulation,NULL);
+    error = thread_fork("mouse_simulation thread",NULL,index,mouse_simulation,NULL);
     if (error) {
       panic("mouse_simulation: thread_fork failed: %s\n",strerror(error));
     }
