@@ -241,9 +241,10 @@ cv_wait(struct cv *cv, struct lock *lock)
 void
 cv_signal(struct cv *cv, struct lock *lock)
 {
-	// Write this
-	(void)cv;    // suppress warning until code gets written
-	(void)lock;  // suppress warning until code gets written
+  assert(cv != NULL);
+  int interrupts = splhigh();
+  thread_wakeup(cv);
+  splx(interrupts);
 }
 
 void
