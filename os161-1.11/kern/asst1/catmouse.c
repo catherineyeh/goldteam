@@ -313,8 +313,10 @@ catmouse(int nargs,
     P(CatMouseWait);
   }
 
-  /* clean up the semaphore that we created */
+  /* clean up the semaphores that we created */
   sem_destroy(CatMouseWait);
+  sem_destroy(bowls[0]);
+  sem_destroy(bowls[1]);
 
   /* clean up resources used for tracking bowl use */
   cleanup_bowls();
