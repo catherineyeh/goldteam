@@ -41,7 +41,6 @@ defs.mk.sample
 Makefile
 configure
 include
-kern
 lib
 man
 mk
