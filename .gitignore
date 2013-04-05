@@ -40,8 +40,8 @@ root/kernel-ASST0
 defs.mk.sample
 Makefile
 configure
-include
 lib
 man
 mk
 os161-1.11/kern/compile/*
+./kern
