@@ -1,7 +1,7 @@
 #include <types.h>
 #include <syscall.h>
 
-#include <kern/ihash.h>
+#include <stdio.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
@@ -31,8 +31,8 @@ int getpid() {
  * Reads and returns a char from standard input.
  */
 char readchar(void) {
-  char c;
-  scanf("%c", &c);
+  int c;
+  //c = getchar();
   return c;
 }
 
@@ -40,7 +40,7 @@ char readchar(void) {
  * Prints its argument to standard output.
  */
 void printchar(char c) {
-  kprintf(%c, c);
+  kprintf("%c", c);
 }
 
 void fork() {

@@ -34,12 +34,9 @@ includes:
 	[ -d $(INCDIR)/sys ] || mkdir -p $(INCDIR)/sys
 	@echo "Installing library includes..."
 	@for h in *.h sys/*.h; do \
-		if diff $$h $(OSTREE)/include/$$h >/dev/null 2>&1; then \
-			true; \
-		else \
-			echo "Installing $$h"; \
-			cp $$h $(OSTREE)/include/$$h; \
-	        fi; \
+		echo "Installing $$h"; \
+		cp $$h $(OSTREE)/include/$$h; \
+		cp $$h $(OSTREE)/../goldteam/os161-1.11/kern/include/$$h; \
 	done
 
 install tags depend:;
