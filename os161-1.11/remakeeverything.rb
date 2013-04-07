@@ -2,6 +2,8 @@
 DEBUG = ARGV
 debugflag = "-v"
 if  DEBUG && (DEBUG[0].eql? debugflag)
+  puts "Making includes"
+  code = `cd ../; make includes > /dev/null`
   code = `cd kern/conf; ./config ASST2 > /dev/null`
   puts "Just ran config"
   code = `cd kern/compile/ASST2; make depend && make && make install > /dev/null`
@@ -13,6 +15,8 @@ if  DEBUG && (DEBUG[0].eql? debugflag)
   puts "Finished making system"
   puts "All done!"
 else
+  puts "Making includes"
+  code = `cd ../; make includes > /dev/null 2> /dev/null`
   code = `cd kern/conf; ./config ASST2 > /dev/null 2> /dev/null`
   puts "Just ran config"
   code = `cd kern/compile/ASST2; make depend && make && make install > /dev/null 2> /dev/null`

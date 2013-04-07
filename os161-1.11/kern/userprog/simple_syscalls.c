@@ -1,7 +1,7 @@
 #include <types.h>
 #include <syscall.h>
 
-#include <kern/hash.h>
+#include <stdio.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
@@ -24,10 +24,23 @@ int _printstring(char *string, int numchars) {
 
 int getpid() {
   // Todo
+  return 0;
 }
 
+/* char readchar(void)
+ * Reads and returns a char from standard input.
+ */
 char readchar(void) {
-  // Todo
+  int c;
+  //c = getchar();
+  return c;
+}
+
+/* void printchar(char)
+ * Prints its argument to standard output.
+ */
+void printchar(char c) {
+  kprintf("%c", c);
 }
 
 void fork() {
@@ -38,7 +51,7 @@ void execv() {
   // Todo -- the heart of the assignment
 }
 
-waitpid() {
+void waitpid() {
   // Todo
 }
 

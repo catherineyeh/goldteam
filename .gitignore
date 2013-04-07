@@ -40,7 +40,6 @@ root/kernel-ASST0
 defs.mk.sample
 Makefile
 configure
-include
 lib
 man
 mk
