@@ -5,7 +5,7 @@
  * According to ANSI C we are not supposed to do this, but we're not 
  * exactly ANSI-compliant anyway.
  */
-#include <os/sys/types.h>
+#include <sys/types.h>
 #include <stdarg.h>
 
 /* Constant returned by a bunch of stdio functions on error */
