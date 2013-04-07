@@ -78,10 +78,11 @@ extern u_int32_t dbflags;
 
 /*
  * Random number generator, using the random device.
- */
+ * Commented out in favor of stdlib.h's rng.
 #define RAND_MAX (randmax())
 u_int32_t randmax(void);
 u_int32_t random(void);
+*/
 
 /*
  * Kernel heap memory allocation. Like malloc/free.
