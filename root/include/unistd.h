@@ -97,6 +97,7 @@ int close(int filehandle);
 int reboot(int code);
 int _helloworld();
 int _printint(int value);
+int _printstring(char *string, int numchar);
 int sync(void);
 /* mkdir - see sys/stat.h */
 int rmdir(const char *dirname);

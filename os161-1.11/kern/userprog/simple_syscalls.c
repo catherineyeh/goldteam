@@ -1,5 +1,7 @@
 #include <types.h>
 #include <syscall.h>
+#include <curthread.h>
+#include <thread.h>
 
 int errno = 0; // Required
 #include <errno.h>
@@ -26,9 +28,8 @@ int _printstring(char *string, int numchars) {
   return errno;
 }
 
-int getpid() {
-  // Todo
-  return 0;
+int32_t getpid() {
+  return curthread->pid;
 }
 
 /* char readchar(void)

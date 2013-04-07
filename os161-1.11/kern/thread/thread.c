@@ -13,6 +13,7 @@
 #include <addrspace.h>
 #include <vnode.h>
 #include "opt-synchprobs.h"
+#include <process.h>
 
 /* States a thread can be in. */
 typedef enum {
@@ -25,6 +26,8 @@ typedef enum {
 /* Global variable for the thread currently executing at any given time. */
 struct thread *curthread;
 
+struct process *processes[1000];
+
 /* Table of sleeping threads. */
 static struct array *sleepers;
 
@@ -33,6 +36,7 @@ static struct array *zombies;
 
 /* Total number of outstanding threads. Does not count zombies[]. */
 static int numthreads;
+
 
 /*
  * Create a thread. This is used both to create the first thread's 
@@ -58,6 +62,22 @@ thread_create(const char *name)
 	thread->t_vmspace = NULL;
 
 	thread->t_cwd = NULL;
+  
+  // Create process for thread
+  struct process *p = kmalloc(sizeof(struct process));
+  int j = 1;
+  while (1) {
+    if (processes[j] == 0) {
+      p = process_create(p, j, curthread);
+      processes[j] = p;
+      thread->process = p;
+      thread->pid = j;
+      break;
+    }
+    j++;
+    if (j == 1000)
+      j = j % 999; // we don't want to use 0 because pid 0 is reserved
+  }
 	
 	// If you add things to the thread structure, be sure to initialize
 	// them here.
@@ -494,6 +514,8 @@ thread_exit(void)
 		VOP_DECREF(curthread->t_cwd);
 		curthread->t_cwd = NULL;
 	}
+  
+  processes[curthread->pid] = 0;
 
 	assert(numthreads>0);
 	numthreads--;

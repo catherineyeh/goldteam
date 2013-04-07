@@ -44,3 +44,7 @@ lib
 man
 mk
 os161-1.11/kern/compile/*
+ 
+#Xcode workspace
+goldteam.xcworkspace
+os161-1.11/os161-1.11.xcodeproj
