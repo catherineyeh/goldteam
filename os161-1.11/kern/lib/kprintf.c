@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <kern/unistd.h>
 #include <lib.h>
+#include <stdio.h>
 #include <synch.h>
 #include <vfs.h>          // for vfs_sync()
 #include <thread.h>       // for thread_panic();
