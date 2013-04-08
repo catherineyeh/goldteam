@@ -19,8 +19,8 @@ int _printint(int value) {
 
 int _printstring(char *string, int numchars) {
   char str[255];
-  int actual;
-  copyinstr(string, str, numchars+1, &actual);
+  size_t actual;
+  copyinstr((const_userptr_t*)string, str, numchars+1, &actual);
   if  (str[numchars] == '\0' && strlen(str) == numchars) {
     return kprintf(str);
   }
