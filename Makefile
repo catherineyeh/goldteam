@@ -19,6 +19,26 @@
 # libraries into the include directory of the system tree.
 #
 
+silent:
+	make -s goldteam
+
+goldteam:
+	echo "Making includes...\c"
+	make includes > /dev/null && \
+	echo "done."
+	echo "Running config...\c"
+	cd os161-1.11/kern/conf && ./config ASST2 > /dev/null && \
+	echo "done."
+	echo "Making assignment-specific stuff...\c"
+	cd os161-1.11/kern/compile/ASST2 && make depend > /dev/null && make > /dev/null && make install > /dev/null && \
+	echo "done."
+	echo "Making testbin stuff...\c"
+	cd os161-1.11/testbin && make > /dev/null && make install > /dev/null && \
+	echo "done."
+	echo "Making main executable...\c"
+	cd os161-1.11 && make > /dev/null && \
+	echo "done."
+
 all:
 	$(MAKE) includes
 	$(MAKE) depend
