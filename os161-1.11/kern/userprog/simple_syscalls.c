@@ -20,8 +20,8 @@ int _printint(int value) {
 int _printstring(char *string, int numchars) {
   char str[255];
   size_t actual;
-  copyinstr((const_userptr_t*)string, str, numchars+1, &actual);
-  if  (str[numchars] == '\0' && strlen(str) == numchars) {
+  copyinstr(string, str, numchars+1, &actual);
+  if  (str[numchars] == '\0' && (int)strlen(str) == numchars) {
     return kprintf(str);
   }
   errno = -1; // Todo: correct this errno
@@ -51,6 +51,7 @@ char readchar(void) {
       // A hardware I/O error occurred reading the data.
     }
   }
+  return result;
 }
 
 /* void printchar(char)
@@ -94,5 +95,6 @@ void waitpid() {
 }
 
 void _exit(int code) {
+  code = code;
   return thread_exit();
 }
