@@ -8,6 +8,7 @@ int errno = 0; // Required
 #include <lib.h>
 #include <stdio.h>
 #include <lib.h>
+#include <machine/spl.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
@@ -20,7 +21,7 @@ int _printint(int value) {
 int _printstring(char *string, int numchars) {
   char str[255];
   size_t actual;
-  copyinstr(string, str, numchars+1, &actual);
+  copyinstr((void*)string, str, numchars+1, &actual);
   if  (str[numchars] == '\0' && (int)strlen(str) == numchars) {
     return kprintf(str);
   }
@@ -84,9 +85,10 @@ int printchar(char c) {
 
 pid_t fork() {
   int s = splhigh();
-  struct thread *child_thread = thread_fork("child", 0, 0, 0, curthread);
+  int err;
+  err = thread_fork("child", 0, 0, 0, &curthread);
   splx(s);
-  
+
   pid_t pid = curthread->pid;
   return pid;
 }
