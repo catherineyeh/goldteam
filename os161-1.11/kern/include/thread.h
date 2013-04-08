@@ -38,7 +38,7 @@ struct thread {
 	 */
 	struct vnode *t_cwd;
   
-  int32_t pid;
+  pid_t pid;
   struct process *process;
 };
 
