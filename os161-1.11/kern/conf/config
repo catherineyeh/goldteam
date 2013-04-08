@@ -736,7 +736,7 @@ echo -n ' Makefile'
 #     (points to the machine-dependent include files)
 #
 
-rm -f $COMPILEDIR/machine
+rm -rf $COMPILEDIR/machine
 ln -s ../../arch/$ARCH/include $COMPILEDIR/machine
 
 
