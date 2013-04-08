@@ -28,7 +28,7 @@ int _printstring(char *string, int numchars) {
   return errno;
 }
 
-int32_t getpid() {
+pid_t getpid() {
   return curthread->pid;
 }
 
@@ -82,8 +82,13 @@ int printchar(char c) {
   return 0;
 }
 
-void fork() {
-  // Todo
+pid_t fork() {
+  int s = splhigh();
+  struct thread *child_thread = thread_fork("child", 0, 0, 0, curthread);
+  splx(s);
+  
+  pid_t pid = curthread->pid;
+  return pid;
 }
 
 void execv() {
