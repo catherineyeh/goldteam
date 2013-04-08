@@ -67,17 +67,15 @@ thread_create(const char *name)
   struct process *p = kmalloc(sizeof(struct process));
   int j = 0;
   int s;
-  while (1) {
-    for (j = 0; j < 1000; ++j) {
-      if (processes[j] == 0) {
-        s = splhigh();
-        p = process_create(p, j, curthread);
-        processes[j] = p;
-        thread->process = p;
-        thread->pid = j;
-        splx(s);
-        break;
-      }
+  for (j = 1; 1; j = (j % 999) + 1) {
+    if (processes[j] == 0) {
+      s = splhigh();
+      p = process_create(p, j, curthread);
+      processes[j] = p;
+      thread->process = p;
+      thread->pid = j;
+      splx(s);
+      break;
     }
   }
 	
