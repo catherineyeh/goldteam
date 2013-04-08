@@ -65,18 +65,20 @@ thread_create(const char *name)
   
   // Create process for thread
   struct process *p = kmalloc(sizeof(struct process));
-  int j = 1;
+  int j = 0;
+  int s;
   while (1) {
-    if (processes[j] == 0) {
-      p = process_create(p, j, curthread);
-      processes[j] = p;
-      thread->process = p;
-      thread->pid = j;
-      break;
+    for (j = 0; j < 1000; ++j) {
+      if (processes[j] == 0) {
+        s = splhigh();
+        p = process_create(p, j, curthread);
+        processes[j] = p;
+        thread->process = p;
+        thread->pid = j;
+        splx(s);
+        break;
+      }
     }
-    j++;
-    if (j == 1000)
-      j = j % 999; // we don't want to use 0 because pid 0 is reserved
   }
 	
 	// If you add things to the thread structure, be sure to initialize
@@ -516,6 +518,7 @@ thread_exit(void)
 	}
   
   processes[curthread->pid] = 0;
+  curthread->process->did_exit = 1;
 
 	assert(numthreads>0);
 	numthreads--;
