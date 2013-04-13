@@ -54,11 +54,11 @@ clean:
 #
 depend:
 	$(HOST_CC) $(HOST_CFLAGS) $(COMPAT_CFLAGS) -MM $(SRCS) |\
-	  awk '{x=$$0~"^ ";for(i=1;i<=NF;i++){printf "%d %s\n",x,$$i;x=1; }}'|\
-	  sed '/1 \\/d' | awk '{ printf "%s%s", $$1?" \\\n ":"\n", $$2 }' |\
-	  sed 's/\.o/\.ho/' |\
-	  sed 's|$(OSTREE)|$$(OSTREE)|;$$p;$$x' > dependh.mk
-include dependh.mk
+	awk '{x=$$0~"^ ";for(i=1;i<=NF;i++){printf "%d %s\n",x,$$i;x=1; }}'|\
+	sed '/1 \\/d' | awk '{ printf "%s%s", $$1?" \\\n ":"\n", $$2 }' |\
+	sed 's/\.o/\.ho/' |\
+	sed 's|$(OSTREE)|$$(OSTREE)|;$$p;$$x' > dependh.mk
+#include dependh.mk
 
 #
 # [ -d $(OSTREE)/hostlib ] succeeds if $(OSTREE)/hostlib is a directory.

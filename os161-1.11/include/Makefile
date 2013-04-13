@@ -36,7 +36,7 @@ includes:
 	@for h in *.h sys/*.h; do \
 		echo "Installing $$h"; \
 		cp $$h $(OSTREE)/include/$$h; \
-		cp $$h $(OSTREE)/../goldteam/os161-1.11/kern/include/$$h; \
+		cp $$h $(OSTREE)/../os161-1.11/kern/include/$$h; \
 	done
 
 install tags depend:;
