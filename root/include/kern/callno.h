@@ -43,6 +43,8 @@
 #define SYS__helloworld  32
 #define SYS__printint    33
 #define SYS__printstring 34
+#define SYS_printchar    35
+#define SYS_readchar     36
 /*CALLEND*/
 
 
