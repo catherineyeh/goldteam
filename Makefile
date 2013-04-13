@@ -19,24 +19,33 @@
 # libraries into the include directory of the system tree.
 #
 
+asst = ASST2
+pwd = $(shell pwd)
+
 silent:
-	make -s goldteam
+	$(MAKE) -s goldteam
 
 goldteam:
+	echo "Running configure...\c"
+	cd os161-1.11 && ./configure --ostree=$(pwd)/root --toolprefix=os161-
+	echo "done."
+	echo "Running assignment config...\c"
+	cd os161-1.11/kern/conf && ./config $(asst) > /dev/null && \
+	echo "done."
+	echo "Making assignment depends...\c"
+	cd os161-1.11/kern/compile/$(asst) && $(MAKE) depend > /dev/null && $(MAKE) > /dev/null && $(MAKE) install > /dev/null && \
+	echo "done."
+	echo "Building user-level utilities and test programs...\c"
+	cd os161-1.11 && $(MAKE) > /dev/null
+	echo "done."
 	echo "Making includes...\c"
-	make includes > /dev/null && \
+	$(MAKE) includes > /dev/null && \
 	echo "done."
-	echo "Running config...\c"
-	cd os161-1.11/kern/conf && ./config ASST2 > /dev/null && \
-	echo "done."
-	echo "Making assignment-specific stuff...\c"
-	cd os161-1.11/kern/compile/ASST2 && make depend > /dev/null && make > /dev/null && make install > /dev/null && \
-	echo "done."
-	echo "Making testbin stuff...\c"
-	cd os161-1.11/testbin && make > /dev/null && make install > /dev/null && \
+	echo "Making tests...\c"
+	cd os161-1.11/testbin && $(MAKE) > /dev/null && $(MAKE) install > /dev/null && \
 	echo "done."
 	echo "Making main executable...\c"
-	cd os161-1.11 && make > /dev/null && \
+	cd os161-1.11 && $(MAKE) > /dev/null && \
 	echo "done."
 
 all:
