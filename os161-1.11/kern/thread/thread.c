@@ -73,7 +73,7 @@ thread_create(const char *name)
       p = process_create(p, j, curthread);
       processes[j] = p;
       thread->process = p;
-      thread->pid = j;
+      thread->process->pid = j;
       splx(s);
       break;
     }
@@ -515,7 +515,7 @@ thread_exit(void)
 		curthread->t_cwd = NULL;
 	}
   
-  processes[curthread->pid] = 0;
+  processes[curthread->process->pid] = 0;
   curthread->process->did_exit = 1;
 
 	assert(numthreads>0);

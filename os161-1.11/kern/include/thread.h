@@ -7,7 +7,7 @@
 
 /* Get machine-dependent stuff */
 #include <machine/pcb.h>
-
+#include <process.h>
 
 struct addrspace;
 
@@ -38,7 +38,6 @@ struct thread {
 	 */
 	struct vnode *t_cwd;
   
-  pid_t pid;
   struct process *process;
 };
 
@@ -138,6 +137,5 @@ void mi_threadstart(void *data1, unsigned long data2,
 
 /* Machine dependent context switch. */
 void md_switch(struct pcb *old, struct pcb *nu);
-
 
 #endif /* _THREAD_H_ */

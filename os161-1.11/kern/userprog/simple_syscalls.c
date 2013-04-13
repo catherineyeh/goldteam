@@ -9,6 +9,7 @@ int errno = 0; // Required
 #include <stdio.h>
 #include <lib.h>
 #include <machine/spl.h>
+#include <process.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
@@ -30,7 +31,7 @@ int _printstring(char *string, int numchars) {
 }
 
 pid_t getpid() {
-  return curthread->pid;
+  return curthread->process->pid;
 }
 
 /* char readchar(void)
@@ -84,13 +85,14 @@ int printchar(char c) {
 }
 
 pid_t fork() {
-  int s = splhigh();
   int err;
+  struct thread *parent_thread = curthread;
   err = thread_fork("child", 0, 0, 0, &curthread);
-  splx(s);
-
-  pid_t pid = curthread->pid;
-  return pid;
+  if (parent_thread->process->pid == (int)curthread->process->pid) {
+    return curthread->process->newest_child_pid;
+  } else {
+    return 0;
+  }
 }
 
 void execv() {

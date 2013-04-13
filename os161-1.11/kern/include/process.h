@@ -5,19 +5,14 @@
 
 struct process {
   pid_t pid;
-  
+
   int did_exit;
   int exit_code;
+  int newest_child_pid;
+
   struct thread *t;
 };
 
-struct process *
-process_create(struct process *p, int pid, struct thread* t) {
-  p->pid = pid;
-  p->t = t;
-  p->did_exit = 0;
-  p->exit_code = 0;
-  return p;
-}
+struct process *process_create(struct process *p, pid_t pid, struct thread *t);
 
 #endif /* _PROCESS_H_ */
