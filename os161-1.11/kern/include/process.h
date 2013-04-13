@@ -13,6 +13,4 @@ struct process {
   struct thread *t;
 };
 
-struct process *process_create(struct process *p, pid_t pid, struct thread *t);
-
 #endif /* _PROCESS_H_ */

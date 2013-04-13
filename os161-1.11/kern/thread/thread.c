@@ -37,6 +37,14 @@ static struct array *zombies;
 /* Total number of outstanding threads. Does not count zombies[]. */
 static int numthreads;
 
+static
+struct process *
+process_create(struct process *p, pid_t pid, struct thread *t) {
+  p->pid = pid;
+  p->t = t;
+  p->did_exit = 0;
+  p->exit_code = 0;
+}
 
 /*
  * Create a thread. This is used both to create the first thread's 
