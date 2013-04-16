@@ -14,6 +14,7 @@
 #include <vm.h>
 #include <vfs.h>
 #include <test.h>
+#include <process.h>
 
 /*
  * Load program "progname" and start running it in usermode.
@@ -64,6 +65,9 @@ runprogram(char *progname)
 		/* thread_exit destroys curthread->t_vmspace */
 		return result;
 	}
+
+  // Create process
+  process_create(process_give_pid(), curthread);
 
 	/* Warp to user mode. */
 	md_usermode(0 /*argc*/, NULL /*userspace addr of argv*/,

@@ -13,7 +13,6 @@
 #include <addrspace.h>
 #include <vnode.h>
 #include "opt-synchprobs.h"
-#include <process.h>
 
 /* States a thread can be in. */
 typedef enum {
@@ -26,8 +25,6 @@ typedef enum {
 /* Global variable for the thread currently executing at any given time. */
 struct thread *curthread;
 
-struct process *processes[1000];
-
 /* Table of sleeping threads. */
 static struct array *sleepers;
 
@@ -36,15 +33,6 @@ static struct array *zombies;
 
 /* Total number of outstanding threads. Does not count zombies[]. */
 static int numthreads;
-
-static
-struct process *
-process_create(struct process *p, pid_t pid, struct thread *t) {
-  p->pid = pid;
-  p->t = t;
-  p->did_exit = 0;
-  p->exit_code = 0;
-}
 
 /*
  * Create a thread. This is used both to create the first thread's 
@@ -71,22 +59,6 @@ thread_create(const char *name)
 
 	thread->t_cwd = NULL;
   
-  // Create process for thread
-  struct process *p = kmalloc(sizeof(struct process));
-  int j = 0;
-  int s;
-  for (j = 1; 1; j = (j % 999) + 1) {
-    if (processes[j] == 0) {
-      s = splhigh();
-      p = process_create(p, j, curthread);
-      processes[j] = p;
-      thread->process = p;
-      thread->process->pid = j;
-      splx(s);
-      break;
-    }
-  }
-	
 	// If you add things to the thread structure, be sure to initialize
 	// them here.
 	
@@ -523,9 +495,6 @@ thread_exit(void)
 		curthread->t_cwd = NULL;
 	}
   
-  processes[curthread->process->pid] = 0;
-  curthread->process->did_exit = 1;
-
 	assert(numthreads>0);
 	numthreads--;
 	mi_switch(S_ZOMB);

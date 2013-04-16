@@ -10,6 +10,7 @@ int errno = 0; // Required
 #include <lib.h>
 #include <machine/spl.h>
 #include <process.h>
+#include <machine/trapframe.h>
 
 int _helloworld() {
   return kprintf("Hello World\n");
@@ -31,7 +32,7 @@ int _printstring(char *string, int numchars) {
 }
 
 pid_t getpid() {
-  return curthread->process->pid;
+  //return curthread->process->pid;
 }
 
 /* char readchar(void)
@@ -84,15 +85,41 @@ int printchar(char c) {
   return 0;
 }
 
-pid_t fork() {
+struct process_extras {
+  struct trapframe *tf;
+  struct addrspace *ar;
+  pid_t pid; // child pid
+};
+
+void md_entry(void *data1, unsigned long data2) {
+  struct process_extras *pe = (struct process_extras *) data1;  
+  curthread->t_vmspace = pe->ar;
+  struct trapframe new_tf;
+  memcpy(&new_tf, pe->tf, sizeof(struct trapframe));
+  new_tf.tf_epc += 4;
+  new_tf.tf_v0 = 0;
+
+  process_create(pe->pid, curthread);
+
+  mips_usermode(&new_tf);
+}
+
+pid_t fork(struct trapframe *tf, int *retvalue) {
   int err;
-  struct thread *parent_thread = curthread;
-  err = thread_fork("child", 0, 0, 0, &curthread);
-  if (parent_thread->process->pid == (int)curthread->process->pid) {
-    return curthread->process->newest_child_pid;
-  } else {
-    return 0;
-  }
+
+  struct trapframe *new_tf = NULL;
+  memcpy(new_tf, tf, sizeof(struct trapframe)); //memcpy trapframe
+  struct addrspace *new_ar = NULL;
+  as_copy(curthread->t_vmspace, &new_ar); // new address space
+
+  //as_activate(curthread->t_vmspace);
+
+  pid_t pid = process_give_pid();
+  struct process_extras p_extras = {new_tf, new_ar, pid};
+
+  err = thread_fork("child", &p_extras, 0, md_entry, NULL); // pass in function
+  *retvalue = pid;
+  return err;
 }
 
 void execv() {
