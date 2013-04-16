@@ -57,7 +57,7 @@ char readchar(void) {
   return result;
 }
 
-/* void printchar(char)
+/* int printchar(char)
  * Prints its argument to standard output.
  */
 int printchar(char c) {

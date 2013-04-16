@@ -94,6 +94,14 @@ mips_syscall(struct trapframe *tf)
 	    	_exit(tf->tf_a0);
 	    	break;
 
+      case SYS_printchar:
+        err = printchar(tf->tf_a0);
+        break;
+
+      case SYS_readchar:
+        err = readchar();
+        break;
+
       case SYS_fork:
         err = fork(tf, &retval);
         break;
