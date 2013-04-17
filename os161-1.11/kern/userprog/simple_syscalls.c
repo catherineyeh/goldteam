@@ -102,6 +102,8 @@ void md_entry(void *data1, unsigned long data2) {
 
   process_create(pe->pid, curthread);
 
+  kfree(pe);
+
   mips_usermode(&new_tf);
 }
 
