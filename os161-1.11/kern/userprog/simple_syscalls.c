@@ -32,7 +32,7 @@ int _printstring(char *string, int numchars) {
 }
 
 pid_t getpid() {
-  //return curthread->process->pid;
+  return process_getpid(curthread);
 }
 
 /* char readchar(void)
@@ -98,6 +98,7 @@ void md_entry(void *data1, unsigned long data2) {
   memcpy(&new_tf, pe->tf, sizeof(struct trapframe));
   new_tf.tf_epc += 4;
   new_tf.tf_v0 = 0;
+  new_tf.tf_a3 = 0;
 
   process_create(pe->pid, curthread);
 
@@ -108,16 +109,20 @@ pid_t fork(struct trapframe *tf, int *retvalue) {
   int err;
 
   struct trapframe *new_tf = NULL;
+  new_tf = kmalloc(sizeof(struct trapframe));
   memcpy(new_tf, tf, sizeof(struct trapframe)); //memcpy trapframe
   struct addrspace *new_ar = NULL;
   as_copy(curthread->t_vmspace, &new_ar); // new address space
 
-  //as_activate(curthread->t_vmspace);
+  as_activate(curthread->t_vmspace);
 
   pid_t pid = process_give_pid();
-  struct process_extras p_extras = {new_tf, new_ar, pid};
+  struct process_extras *p_extras = kmalloc(sizeof(struct process_extras));
+  p_extras->tf = new_tf;
+  p_extras->ar = new_ar;
+  p_extras->pid = pid;
 
-  err = thread_fork("child", &p_extras, 0, md_entry, NULL); // pass in function
+  err = thread_fork("child", p_extras, 0, md_entry, NULL); // pass in function
   *retvalue = pid;
   return err;
 }

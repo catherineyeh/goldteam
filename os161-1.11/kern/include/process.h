@@ -14,6 +14,7 @@ struct process {
 };
 
 struct process *process_create(pid_t pid, struct thread *t);
+pid_t process_getpid(struct thread *ct);
 pid_t process_give_pid();
 
 #endif /* _PROCESS_H_ */
