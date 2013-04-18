@@ -3,6 +3,7 @@ int main() {
   pid_t pid;
   pid = fork();
   pid = fork();
+  getpid();
   _printstring("New process\n", 12);
   return 0;
 }

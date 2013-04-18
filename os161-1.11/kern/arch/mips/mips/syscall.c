@@ -102,6 +102,10 @@ mips_syscall(struct trapframe *tf)
         err = readchar();
         break;
 
+      case SYS_getpid:
+        getpid();
+        break;
+
       case SYS_fork:
         err = fork(tf, &retval);
         break;

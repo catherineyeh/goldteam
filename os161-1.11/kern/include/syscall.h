@@ -10,6 +10,7 @@ int _helloworld();
 int _printint(int value);
 int _printstring(char *string, int numchars);
 int printchar(char c);
+int getpid();
 char readchar();
 void _exit(int code);
 
