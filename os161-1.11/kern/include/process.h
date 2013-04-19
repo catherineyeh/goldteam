@@ -14,6 +14,7 @@ struct process {
 };
 
 struct process *process_create(pid_t pid, struct thread *t);
+int process_remove_process(pid_t pid);
 pid_t process_give_pid();
 
 #endif /* _PROCESS_H_ */
