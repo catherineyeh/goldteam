@@ -142,5 +142,7 @@ void waitpid() {
 
 void _exit(int code) {
   struct process* proc = get_process(curthread->pid);
+  proc->did_exit = 1;
+  proc->exit_code = code;
   thread_exit();
 }

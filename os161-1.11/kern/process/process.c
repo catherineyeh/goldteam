@@ -19,6 +19,10 @@ struct process *process_create(pid_t pid, struct thread *t) {
   return p;
 }
 
+int process_remove_process(pid_t pid) {
+  processes[pid] = 0;
+}
+
 pid_t process_give_pid() {
   int i;
   for (i = last_pid_used; i < 1000; i = (i % 999) + 1) {
