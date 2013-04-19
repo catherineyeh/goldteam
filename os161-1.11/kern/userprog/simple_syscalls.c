@@ -32,7 +32,7 @@ int _printstring(char *string, int numchars) {
 }
 
 pid_t getpid() {
-  return process_getpid(curthread);
+  return curthread->pid;
 }
 
 /* char readchar(void)
@@ -133,11 +133,14 @@ void execv() {
   // Todo -- the heart of the assignment
 }
 
+/* waitpid
+ * Fails and returns immdiately if the process specified by pid does not exist
+ * or is not a child of the calling process.
+ */
 void waitpid() {
-  // Todo
 }
 
 void _exit(int code) {
-  code = code;
-  return thread_exit();
+  struct process* proc = get_process(curthread->pid);
+  thread_exit();
 }

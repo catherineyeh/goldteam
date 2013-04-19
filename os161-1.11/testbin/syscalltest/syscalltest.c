@@ -5,5 +5,6 @@ int main() {
   pid = fork();
   getpid();
   _printstring("New process\n", 12);
+  _exit(0);
   return 0;
 }

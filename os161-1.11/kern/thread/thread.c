@@ -92,7 +92,6 @@ thread_destroy(struct thread *thread)
 	kfree(thread);
 }
 
-
 /*
  * Remove zombies. (Zombies are threads/processes that have exited but not
  * been fully deleted yet.)
