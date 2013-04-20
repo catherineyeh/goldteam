@@ -11,6 +11,7 @@ int _printint(int value);
 int _printstring(char *string, int numchars);
 int printchar(char c);
 int getpid();
+int execv(const char *prog, char **args);
 char readchar();
 void _exit(int code);
 
