@@ -137,7 +137,8 @@ void execv() {
  * Fails and returns immdiately if the process specified by pid does not exist
  * or is not a child of the calling process.
  */
-void waitpid() {
+pid_t waitpid(pid_t pid, int *stat_loc, int options) {
+	return 0;
 }
 
 void _exit(int code) {
