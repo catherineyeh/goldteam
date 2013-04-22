@@ -4,7 +4,9 @@
 #include <machine/spl.h>
 #include <process.h>
 
-struct process *processes[1000];
+#define MAX_PROCESSES 1000
+
+struct process *processes[MAX_PROCESSES];
 pid_t last_pid_used = 1;
 
 struct process *process_create(pid_t pid, struct thread *t) {
@@ -38,5 +40,7 @@ pid_t process_give_pid() {
 }
 
 struct process *get_process(pid_t pid) {
+  if (pid > MAX_PROCESSES)
+    return NULL;
   return processes[pid];
 }

@@ -210,7 +210,8 @@ int execv(const char *prog, char **args) {
  * or is not a child of the calling process.
  */
 pid_t waitpid(pid_t pid, int *stat_loc, int options) {
-	return 0;
+  if (get_process(pid) == NULL)
+    return -1;
 }
 
 void _exit(int code) {
