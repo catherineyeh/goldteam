@@ -2,6 +2,12 @@
 #include <syscall.h>
 #include <curthread.h>
 #include <thread.h>
+#include <kern/unistd.h>
+#include <kern/errno.h>
+#include <addrspace.h>
+#include <vm.h>
+#include <vfs.h>
+#include <test.h>
 
 int errno = 0; // Required
 #include <errno.h>
@@ -129,8 +135,74 @@ pid_t fork(struct trapframe *tf, int *retvalue) {
   return err;
 }
 
-void execv() {
-  // Todo -- the heart of the assignment
+int execv(const char *prog, char **args) {
+  // Count arguments
+  int count = 0;
+  int i = 0;
+  if (args && args[0]) {
+    while (args[i]) {
+      count += 1;
+      i += 1;
+    }
+  }
+
+  if (args[count-1]) {
+    panic("Last argument isn't null");
+  }
+
+  char *arguments = kmalloc(sizeof(char)*count);
+  int arglengths[count];
+  int k;
+
+  for (i = 0; i < count; ++i) {
+    arglengths[i] = 0;
+    k = 0;
+    while (args[i][k]) {
+      arglengths[i] += 1;
+    }
+    arglengths[i] += 1;
+  }
+
+  for (i = 0; i < count; ++i) {
+    copyin(args[i], arguments[i], arglengths[i]);
+  }
+
+  struct vnode *v;
+  vaddr_t entrypoint, stackptr;
+  int result;
+
+  result = vfs_open(prog, O_RDONLY, &v);
+  if (result) {
+    return result;
+  }
+
+  curthread->t_vmspace = as_create();
+  if (curthread->t_vmspace == NULL) {
+    vfs_close(v);
+    return ENOMEM;
+  }
+
+  as_activate(curthread->t_vmspace);
+
+  result = load_elf(v, &entrypoint);
+  if (result) {
+    vfs_close(v);
+    return result;
+  }
+
+  vfs_close(v);
+
+  result = as_define_stack(curthread->t_vmspace, &stackptr);
+  if (result) {
+    return result;
+  }
+
+  for (i = 0; i < count; ++i) {
+    copyout(arguments, curthread->t_vmspace, arglengths[i]);
+  }
+
+  md_usermode(count, curthread->t_vmspace, &stackptr, entrypoint);
+
 }
 
 /* waitpid

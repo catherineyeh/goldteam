@@ -11,6 +11,8 @@ struct process {
   int newest_child_pid;
 
   struct thread *t;
+  struct process *children[1000];
+  struct process *parent;
 };
 
 struct process *process_create(pid_t pid, struct thread *t);
