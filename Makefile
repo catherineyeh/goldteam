@@ -26,8 +26,11 @@ silent:
 	$(MAKE) -s goldteam
 
 goldteam:
-	echo "Running configure...\c"
-	cd os161-1.11 && ./configure --ostree=$(pwd)/root --toolprefix=os161-
+	#echo "Running configure...\c"
+	#cd os161-1.11 && ./configure --ostree=$(pwd)/root --toolprefix=os161-
+	#echo "done."
+	echo "Making includes...\c"
+	-$(MAKE) includes > /dev/null && \
 	echo "done."
 	echo "Running assignment config...\c"
 	cd os161-1.11/kern/conf && ./config $(asst) > /dev/null && \
@@ -37,9 +40,6 @@ goldteam:
 	echo "done."
 	echo "Building user-level utilities and test programs...\c"
 	cd os161-1.11 && $(MAKE) > /dev/null
-	echo "done."
-	echo "Making includes...\c"
-	$(MAKE) includes > /dev/null && \
 	echo "done."
 	echo "Making tests...\c"
 	cd os161-1.11/testbin && $(MAKE) > /dev/null && $(MAKE) install > /dev/null && \
